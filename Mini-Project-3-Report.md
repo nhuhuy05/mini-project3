@@ -38,22 +38,22 @@
 * **Figure 1: Màn hình Dashboard & Thống kê nhanh (Home Screen)**
   * *Mô tả:* Hiển thị thẻ số liệu chi tiêu tháng/tuần từ SQLite, banner gradient quét hóa đơn và danh sách hóa đơn gần đây (chế độ Dark Mode).
   
-  <img src="image.png" width="280" alt="Figure 1: Dashboard Screen" />
+  <img src="docs/screenshot/image.png" width="280" alt="Figure 1: Dashboard Screen" />
 
 * **Figure 2: Màn hình Phân tích On-Device OCR (Scanning Screen)**
   * *Mô tả:* Tiến trình trích xuất ký tự quang học offline bằng Google ML Kit, tự động bóc tách thông tin từ ảnh chụp hóa đơn WinMart.
   
-  <img src="image-1.png" width="280" alt="Figure 2: OCR Scan Screen" />
+  <img src="docs/screenshot/image-1.png" width="280" alt="Figure 2: OCR Scan Screen" />
 
 * **Figure 3: Màn hình Xác nhận & Chỉnh sửa (Receipt Review Screen)**
   * *Mô tả:* Màn hình đối chiếu ảnh gốc, kiểm tra kết quả bóc tách (Cửa hàng: WINMART, Ngày: 25/04/2026, Tổng tiền: 237.576 VNĐ, Danh mục: Thực phẩm) trước khi lưu.
   
-  <img src="image-3.png" width="280" alt="Figure 3: Receipt Review Screen" />
+  <img src="docs/screenshot/image-3.png" width="280" alt="Figure 3: Receipt Review Screen" />
 
 * **Figure 4: Biểu đồ CustomPainter & Giao diện Tối (Statistics Screen)**
   * *Mô tả:* Biểu đồ vành khăn (CategoryDonutChart) vẽ thuần bằng Canvas API trực quan hóa tỷ trọng chi tiêu các danh mục trong chế độ Dark Mode.
   
-  <img src="image-4.png" width="280" alt="Figure 4: Statistics Screen" />
+  <img src="docs/screenshot/image-4.png" width="280" alt="Figure 4: Statistics Screen" />
 
 ---
 
