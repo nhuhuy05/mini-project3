@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/currency_formatter.dart';
 
-/// Dữ liệu chi tiêu theo từng ngày trong tuần
+/// DTO dữ liệu chi tiêu theo từng ngày trong tuần
 class DayExpenseData {
   final DateTime date;
-  final String label; // "T2", "T3", "T4", "T5", "T6", "T7", "CN"
+  final String label; // T2, T3, T4...
   final double amount;
   final bool isToday;
 
@@ -17,8 +17,12 @@ class DayExpenseData {
   });
 }
 
-/// Biểu đồ cột chi tiêu 7 ngày trong tuần
-/// Yêu cầu đồ án: Vẽ thuần bằng CustomPainter, KHÔNG dùng thư viện ngoài
+/// Biểu đồ cột thể hiện chi tiêu 7 ngày trong tuần
+/// Đồ án yêu cầu:
+/// - Lập trình thuần bằng Flutter CustomPainter & Canvas API
+/// - Có hiệu ứng hoạt họa (Animation) mọc từ đáy lên
+/// - Tương tác chạm vào từng cột để xem tooltip số tiền chi tiêu
+/// - Thích ứng hoàn hảo với cả Light Mode và Dark Mode
 class WeeklyExpenseChart extends StatefulWidget {
   final List<DayExpenseData> weeklyData;
 
@@ -33,37 +37,37 @@ class WeeklyExpenseChart extends StatefulWidget {
 
 class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+  late AnimationController _controller;
   late Animation<double> _animation;
   int? _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
+    _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 900),
     );
     _animation = CurvedAnimation(
-      parent: _animationController,
+      parent: _controller,
       curve: Curves.easeOutCubic,
     );
-    _animationController.forward();
+    _controller.forward();
   }
 
   @override
   void didUpdateWidget(covariant WeeklyExpenseChart oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.weeklyData != widget.weeklyData) {
-      _animationController.reset();
-      _animationController.forward();
+      _controller.reset();
+      _controller.forward();
       _selectedIndex = null;
     }
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -80,12 +84,12 @@ class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.borderColor),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withValues(alpha: context.isDark ? 0.2 : 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -98,7 +102,7 @@ class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -106,13 +110,13 @@ class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
+                      color: context.textPrimary,
                     ),
                   ),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text(
                     '7 ngày gần nhất',
-                    style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                    style: TextStyle(fontSize: 12, color: context.textSecondary),
                   ),
                 ],
               ),
@@ -121,15 +125,15 @@ class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
                 children: [
                   Text(
                     AppFormatter.formatCurrency(totalWeek),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.primary,
+                      color: context.isDark ? AppColors.primaryLight : AppColors.primary,
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Tổng tuần',
-                    style: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                    style: TextStyle(fontSize: 11, color: context.textMuted),
                   ),
                 ],
               ),
@@ -143,7 +147,7 @@ class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
-                color: AppColors.primaryContainer,
+                color: context.isDark ? AppColors.primaryContainerDark : AppColors.primaryContainer,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -151,18 +155,18 @@ class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
                 children: [
                   Text(
                     '${widget.weeklyData[_selectedIndex!].label} (${AppFormatter.formatDate(widget.weeklyData[_selectedIndex!].date)})',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primaryDark,
+                      color: context.isDark ? Colors.white : AppColors.primaryDark,
                     ),
                   ),
                   Text(
                     AppFormatter.formatCurrency(widget.weeklyData[_selectedIndex!].amount),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+                      color: context.isDark ? AppColors.primaryLight : AppColors.primary,
                     ),
                   ),
                 ],
@@ -198,6 +202,11 @@ class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
                       maxAmount: maxAmount > 0 ? maxAmount : 100000,
                       animationProgress: _animation.value,
                       selectedIndex: _selectedIndex,
+                      trackColor: context.surfaceVariantBg,
+                      gridColor: context.borderColor,
+                      textColor: context.textSecondary,
+                      textPrimaryColor: context.textPrimary,
+                      primaryColor: context.isDark ? AppColors.primaryLight : AppColors.primary,
                     ),
                   ),
                 );
@@ -216,12 +225,22 @@ class _WeeklyBarChartPainter extends CustomPainter {
   final double maxAmount;
   final double animationProgress;
   final int? selectedIndex;
+  final Color trackColor;
+  final Color gridColor;
+  final Color textColor;
+  final Color textPrimaryColor;
+  final Color primaryColor;
 
   _WeeklyBarChartPainter({
     required this.data,
     required this.maxAmount,
     required this.animationProgress,
     this.selectedIndex,
+    required this.trackColor,
+    required this.gridColor,
+    required this.textColor,
+    required this.textPrimaryColor,
+    required this.primaryColor,
   });
 
   @override
@@ -237,7 +256,7 @@ class _WeeklyBarChartPainter extends CustomPainter {
 
     // 1. Vẽ đường lưới ngang (Grid lines mờ)
     final gridPaint = Paint()
-      ..color = AppColors.border
+      ..color = gridColor
       ..strokeWidth = 1.0;
 
     for (int i = 0; i <= 3; i++) {
@@ -265,7 +284,7 @@ class _WeeklyBarChartPainter extends CustomPainter {
         ),
         const Radius.circular(6),
       );
-      final trackPaint = Paint()..color = AppColors.surfaceVariant;
+      final trackPaint = Paint()..color = trackColor;
       canvas.drawRRect(trackRect, trackPaint);
 
       // Cột giá trị thực tế (Active Bar)
@@ -286,7 +305,7 @@ class _WeeklyBarChartPainter extends CustomPainter {
         final barPaint = Paint()
           ..color = isSelected
               ? AppColors.accent
-              : (day.isToday ? AppColors.primary : AppColors.primaryLight);
+              : (day.isToday ? primaryColor : AppColors.primaryLight);
 
         canvas.drawRRect(barRect, barPaint);
       }
@@ -296,8 +315,8 @@ class _WeeklyBarChartPainter extends CustomPainter {
         text: day.label,
         style: TextStyle(
           color: day.isToday
-              ? AppColors.primary
-              : (isSelected ? AppColors.textPrimary : AppColors.textSecondary),
+              ? primaryColor
+              : (isSelected ? textPrimaryColor : textColor),
           fontSize: 11,
           fontWeight: (day.isToday || isSelected) ? FontWeight.w700 : FontWeight.w500,
         ),
@@ -317,7 +336,7 @@ class _WeeklyBarChartPainter extends CustomPainter {
 
       // Chấm đánh dấu hôm nay (Today Dot)
       if (day.isToday) {
-        final dotPaint = Paint()..color = AppColors.primary;
+        final dotPaint = Paint()..color = primaryColor;
         canvas.drawCircle(
           Offset(centerX, size.height - 2),
           2.5,
@@ -331,6 +350,8 @@ class _WeeklyBarChartPainter extends CustomPainter {
   bool shouldRepaint(covariant _WeeklyBarChartPainter oldDelegate) {
     return oldDelegate.animationProgress != animationProgress ||
         oldDelegate.selectedIndex != selectedIndex ||
+        oldDelegate.trackColor != trackColor ||
+        oldDelegate.gridColor != gridColor ||
         oldDelegate.data != data;
   }
 }

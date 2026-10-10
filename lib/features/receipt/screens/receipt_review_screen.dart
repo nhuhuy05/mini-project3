@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/services/receipt_controller.dart';
 import '../../../core/utils/currency_formatter.dart';
+import '../../../core/widgets/theme_toggle_button.dart';
 import '../../../data/models/receipt_data.dart';
 import '../../../data/models/receipt_model.dart';
 
@@ -165,7 +166,7 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: context.cardBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -186,22 +187,22 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppColors.border,
+                        color: context.borderColor,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.receipt_long_rounded, color: AppColors.primary),
-                      SizedBox(width: 8),
+                      const Icon(Icons.receipt_long_rounded, color: AppColors.primary),
+                      const SizedBox(width: 8),
                       Text(
                         'Nội dung nhận diện gốc (Raw OCR Text)',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.textPrimary,
                         ),
                       ),
                     ],
@@ -212,18 +213,19 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1E293B),
+                        color: context.surfaceVariantBg,
                         borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: context.borderColor),
                       ),
                       child: SingleChildScrollView(
                         controller: scrollController,
                         child: Text(
                           widget.rawText.trim(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'monospace',
                             fontSize: 13,
                             height: 1.5,
-                            color: Color(0xFFE2E8F0),
+                            color: context.textPrimary,
                           ),
                         ),
                       ),
@@ -382,7 +384,7 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
+              style: TextStyle(fontSize: 13, color: context.textPrimary),
             ),
           ),
         ],
@@ -393,9 +395,13 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.scaffoldBg,
       appBar: AppBar(
         title: Text(widget.existingReceipt != null ? 'Chỉnh Sửa Hóa Đơn' : 'Xác Nhận Hóa Đơn'),
+        actions: const [
+          ThemeToggleButton(),
+          SizedBox(width: 8),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -412,9 +418,9 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.cardBg,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: context.borderColor),
                         ),
                         child: Row(
                           children: [
@@ -429,7 +435,7 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
                                     height: 100,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
-                                      color: const Color(0xFF1E293B),
+                                      color: context.surfaceVariantBg,
                                     ),
                                     clipBehavior: Clip.antiAlias,
                                     child: kIsWeb
@@ -461,20 +467,20 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Ảnh hóa đơn đã chụp',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
-                                      color: AppColors.textPrimary,
+                                      color: context.textPrimary,
                                     ),
                                   ),
                                   const SizedBox(height: 4),
-                                  const Text(
+                                  Text(
                                     'Bấm vào ảnh để phóng to đối chiếu, hoặc xem lại nội dung nhận diện gốc.',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: AppColors.textSecondary,
+                                      color: context.textSecondary,
                                     ),
                                   ),
                                   const SizedBox(height: 8),
@@ -495,12 +501,12 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
                       ),
                       const SizedBox(height: 20),
 
-                      const Text(
+                      Text(
                         'Thông tin chi tiết (Cho phép chỉnh sửa)',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -534,10 +540,10 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
                           ),
                           child: Text(
                             AppFormatter.formatDate(_selectedDate),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
+                              color: context.textPrimary,
                             ),
                           ),
                         ),
@@ -625,9 +631,9 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
             // Thanh công cụ nút bấm: [ Hủy ] và [ Lưu hóa đơn ]
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                border: Border(top: BorderSide(color: AppColors.border)),
+              decoration: BoxDecoration(
+                color: context.cardBg,
+                border: Border(top: BorderSide(color: context.borderColor)),
               ),
               child: Row(
                 children: [
@@ -657,8 +663,8 @@ class _ReceiptReviewScreenState extends State<ReceiptReviewScreen> {
                     child: OutlinedButton(
                       onPressed: _isSaving ? null : () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.textSecondary,
-                        side: const BorderSide(color: AppColors.border),
+                        foregroundColor: context.textSecondary,
+                        side: BorderSide(color: context.borderColor),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       ),

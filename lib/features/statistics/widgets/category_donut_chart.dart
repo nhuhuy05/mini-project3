@@ -106,9 +106,9 @@ class _CategoryDonutChartState extends State<CategoryDonutChart>
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardBg,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.borderColor),
         ),
         child: Column(
           children: [
@@ -118,25 +118,25 @@ class _CategoryDonutChartState extends State<CategoryDonutChart>
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppColors.border,
+                  color: context.borderColor,
                   width: 18,
                 ),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
                   '0 đ',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textMuted,
+                    color: context.textSecondary,
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Chưa có dữ liệu chi tiêu trong khoảng thời gian này',
-              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: 13, color: context.textSecondary),
               textAlign: TextAlign.center,
             ),
           ],
@@ -157,12 +157,12 @@ class _CategoryDonutChartState extends State<CategoryDonutChart>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.borderColor),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withValues(alpha: context.isDark ? 0.2 : 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -175,12 +175,12 @@ class _CategoryDonutChartState extends State<CategoryDonutChart>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Phân bổ danh mục',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+                  color: context.textPrimary,
                 ),
               ),
               if (_selectedCategory != null)
@@ -236,7 +236,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart>
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: activeSlice != null ? activeSlice.color : AppColors.textSecondary,
+                            color: activeSlice != null ? activeSlice.color : context.textSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -246,10 +246,10 @@ class _CategoryDonutChartState extends State<CategoryDonutChart>
                           activeSlice != null
                               ? AppFormatter.formatCurrency(activeSlice.amount)
                               : AppFormatter.formatCurrency(widget.totalAmount),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
+                            color: context.textPrimary,
                             letterSpacing: -0.3,
                           ),
                           textAlign: TextAlign.center,
@@ -297,8 +297,8 @@ class _CategoryDonutChartState extends State<CategoryDonutChart>
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? slice.color.withValues(alpha: 0.15)
-                        : AppColors.surfaceVariant,
+                        ? slice.color.withValues(alpha: context.isDark ? 0.25 : 0.15)
+                        : context.surfaceVariantBg,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: isSelected ? slice.color : Colors.transparent,
@@ -322,15 +322,15 @@ class _CategoryDonutChartState extends State<CategoryDonutChart>
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                          color: AppColors.textPrimary,
+                          color: context.textPrimary,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '(${slice.percentage.toStringAsFixed(0)}%)',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
-                          color: AppColors.textSecondary,
+                          color: context.textSecondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'core/constants/app_colors.dart';
 import 'core/services/receipt_controller.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_controller.dart';
 import 'features/expenses/screens/expense_history_screen.dart';
 import 'features/home/screens/home_screen.dart';
 import 'features/scan/screens/camera_scan_screen.dart';
@@ -13,11 +14,18 @@ class BillLensApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BillLens',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: const MainNavigationShell(),
+    return ListenableBuilder(
+      listenable: ThemeController.instance,
+      builder: (context, _) {
+        return MaterialApp(
+          title: 'BillLens',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeController.instance.themeMode,
+          home: const MainNavigationShell(),
+        );
+      },
     );
   }
 }
@@ -82,9 +90,12 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: AppColors.border, width: 1),
+            top: BorderSide(
+              color: context.borderColor,
+              width: 1,
+            ),
           ),
         ),
         child: NavigationBar(

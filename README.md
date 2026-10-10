@@ -68,6 +68,11 @@ Thay vì phải nhập thủ công từng khoản chi, người dùng chỉ cầ
 - **Bảng xếp hạng chi tiêu**: Xếp hạng các nhóm hàng từ cao xuống thấp kèm thanh tiến trình tỉ trọng.
 - **Bộ lọc chu kỳ**: Xem theo *Tuần này*, *Tháng này*, hoặc *Toàn bộ*.
 
+### 🌓 G. Giao diện chuẩn Material 3 & Chế độ Sáng/Tối (Light & Dark Mode)
+- **Hệ thống Design Token**: Bảng màu Emerald/Teal hài hòa, hỗ trợ chế độ Slate Dark Mode (`#0F172A`, `#1E293B`).
+- **Nút chuyển Theme (ThemeToggleButton)**: Nút chuyển động nhanh (Animated Sun/Moon) xuất hiện trên thanh AppBar của tất cả các màn hình chính và chi tiết.
+- **Thích ứng toàn diện (Adaptive Styling)**: Toàn bộ thẻ thống kê, biểu đồ `CustomPainter`, lịch sử chi tiêu, ô nhập liệu và bottom sheets đều tự động biến đổi mượt mà theo `ThemeMode`.
+
 ---
 
 ## 🏗️ 3. Cấu trúc thư mục dự án (Architecture & Folder Structure)
@@ -78,7 +83,7 @@ lib/
 ├── main.dart                               # Entry point, khởi tạo WidgetsFlutterBinding & SQLite
 ├── core/
 │   ├── constants/
-│   │   ├── app_colors.dart                 # Bảng màu chuẩn Emerald/Teal Material 3
+│   │   ├── app_colors.dart                 # Bảng màu chuẩn Emerald/Teal & Dark Mode ThemeContextExtension
 │   │   └── app_constants.dart              # Hằng số danh mục chi tiêu, icon, màu sắc
 │   ├── services/
 │   │   ├── ocr_service.dart                # Giao tiếp Google ML Kit Text Recognition
@@ -86,7 +91,10 @@ lib/
 │   │   ├── receipt_image_storage_service.dart # Quản lý lưu trữ/xóa file ảnh cục bộ
 │   │   └── receipt_parser_service.dart     # Heuristic Regex Engine bóc tách thông tin
 │   ├── theme/
-│   │   └── app_theme.dart                  # Cấu hình giao diện Material 3
+│   │   ├── app_theme.dart                  # Cấu hình giao diện Material 3 (Light & Dark)
+│   │   └── theme_controller.dart          # Điều khiển ThemeMode toàn ứng dụng
+│   ├── widgets/
+│   │   └── theme_toggle_button.dart        # Nút chuyển đổi giao diện Sáng/Tối động
 │   └── utils/
 │       └── currency_formatter.dart         # Định dạng tiền tệ VND & ngày tháng
 ├── data/
@@ -190,6 +198,10 @@ Dự án bao gồm bộ Unit Test hoàn chỉnh bao phủ toàn bộ các tầng
 ---
 
 ## 👨‍💻 Tác giả & Đồ án
+- **Sinh viên thực hiện**: Nguyễn Như Huy
+- **Mã số sinh viên (MSSV)**: 23IT.B077
+- **Lớp**: 23IT
+- **Học phần**: Phát triển ứng dụng di động đa nền tảng (Cross-Platform Mobile App Development) - VKU
 - **Ứng dụng**: BillLens – Smart Receipt & Expense Tracker
 - **Ngôn ngữ & Nền tảng**: Dart & Flutter
 - **Repository**: [https://github.com/nhuhuy05/mini-project3](https://github.com/nhuhuy05/mini-project3)

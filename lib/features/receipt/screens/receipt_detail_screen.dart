@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/services/receipt_controller.dart';
 import '../../../core/utils/currency_formatter.dart';
+import '../../../core/widgets/theme_toggle_button.dart';
 import '../../../data/models/receipt_model.dart';
 import 'receipt_review_screen.dart';
 
@@ -70,12 +71,12 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
         ),
         content: Text(
           'Bạn có chắc chắn muốn xóa hóa đơn "${_currentReceipt.merchant}" (${AppFormatter.formatCurrency(_currentReceipt.total)}) không?\n\nHành động này không thể hoàn tác.',
-          style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+          style: TextStyle(fontSize: 14, color: context.textPrimary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Hủy', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('Hủy', style: TextStyle(color: context.textSecondary)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -163,6 +164,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
       appBar: AppBar(
         title: const Text('Chi Tiết Hóa Đơn'),
         actions: [
+          const ThemeToggleButton(),
           IconButton(
             icon: const Icon(Icons.edit_outlined),
             tooltip: 'Chỉnh sửa',
@@ -186,9 +188,9 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
               child: Container(
                 height: 220,
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceVariant,
+                  color: context.surfaceVariantBg,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: context.borderColor),
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: Stack(
@@ -243,12 +245,12 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardBg,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: context.borderColor),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.03),
+                    color: Colors.black.withValues(alpha: context.isDark ? 0.2 : 0.03),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -313,10 +315,10 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                   // Tên cửa hàng
                   Text(
                     _currentReceipt.merchant,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
+                      color: context.textPrimary,
                     ),
                   ),
                 ],
@@ -328,9 +330,9 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardBg,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: context.borderColor),
               ),
               child: Column(
                 children: [
@@ -339,7 +341,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                     label: 'Ngày chi tiêu',
                     value: AppFormatter.formatDate(_currentReceipt.date),
                   ),
-                  const Divider(height: 24, color: AppColors.border),
+                  Divider(height: 24, color: context.borderColor),
                   _buildDetailRow(
                     icon: Icons.notes_rounded,
                     label: 'Ghi chú',
@@ -348,7 +350,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                         : 'Không có ghi chú',
                     isMuted: _currentReceipt.note == null || _currentReceipt.note!.isEmpty,
                   ),
-                  const Divider(height: 24, color: AppColors.border),
+                  Divider(height: 24, color: context.borderColor),
                   _buildDetailRow(
                     icon: Icons.access_time_rounded,
                     label: 'Ngày lưu',
@@ -362,21 +364,21 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
             // 4. Card Raw OCR Text (Google ML Kit)
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardBg,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: context.borderColor),
               ),
               child: Column(
                 children: [
                   ListTile(
                     leading: const Icon(Icons.document_scanner_outlined, color: AppColors.primary),
-                    title: const Text(
+                    title: Text(
                       'Văn bản gốc từ OCR',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: context.textPrimary),
                     ),
-                    subtitle: const Text(
+                    subtitle: Text(
                       'Dữ liệu bóc tách thô từ Google ML Kit',
-                      style: TextStyle(fontSize: 12, color: AppColors.textMuted),
+                      style: TextStyle(fontSize: 12, color: context.textSecondary),
                     ),
                     trailing: IconButton(
                       icon: Icon(
@@ -395,7 +397,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                     },
                   ),
                   if (_isOcrExpanded) ...[
-                    const Divider(height: 1, color: AppColors.border),
+                    Divider(height: 1, color: context.borderColor),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -404,18 +406,19 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.surfaceVariant,
+                              color: context.surfaceVariantBg,
                               borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: context.borderColor),
                             ),
                             child: SelectableText(
                               _currentReceipt.rawText.isNotEmpty
                                   ? _currentReceipt.rawText
                                   : '(Không có nội dung văn bản thô)',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 13,
                                 height: 1.5,
                                 fontFamily: 'monospace',
-                                color: AppColors.textPrimary,
+                                color: context.textPrimary,
                               ),
                             ),
                           ),
@@ -513,9 +516,9 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
         const SizedBox(width: 12),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
-            color: AppColors.textSecondary,
+            color: context.textSecondary,
           ),
         ),
         const Spacer(),
@@ -526,7 +529,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: isMuted ? AppColors.textMuted : AppColors.textPrimary,
+              color: isMuted ? context.textSecondary : context.textPrimary,
             ),
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/services/receipt_controller.dart';
+import '../../../core/theme/theme_controller.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../data/models/receipt_model.dart';
 import '../../receipt/screens/receipt_detail_screen.dart';
@@ -106,12 +107,26 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
     final controller = ReceiptController.instance;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.scaffoldBg,
       appBar: AppBar(
-        title: const Text('Lịch Sử Hóa Đơn'),
+        title: Text(
+          'Lịch Sử Hóa Đơn',
+          style: TextStyle(
+            color: context.textPrimary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         actions: [
+          IconButton(
+            icon: Icon(
+              context.isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+              color: context.isDark ? const Color(0xFFFBBF24) : AppColors.primary,
+            ),
+            tooltip: context.isDark ? 'Chế độ Sáng' : 'Chế độ Tối',
+            onPressed: () => ThemeController.instance.toggleTheme(),
+          ),
           PopupMenuButton<SortOption>(
-            icon: const Icon(Icons.sort_rounded),
+            icon: Icon(Icons.sort_rounded, color: context.textPrimary),
             tooltip: 'Sắp xếp danh sách',
             initialValue: _selectedSort,
             onSelected: (option) {
@@ -127,7 +142,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
                     Icon(
                       _selectedSort == option ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded,
                       size: 18,
-                      color: _selectedSort == option ? AppColors.primary : AppColors.textMuted,
+                      color: _selectedSort == option ? AppColors.primary : context.textMuted,
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -135,7 +150,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: _selectedSort == option ? FontWeight.w600 : FontWeight.normal,
-                        color: _selectedSort == option ? AppColors.primary : AppColors.textPrimary,
+                        color: _selectedSort == option ? AppColors.primary : context.textPrimary,
                       ),
                     ),
                   ],
@@ -149,8 +164,10 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
         listenable: controller,
         builder: (context, _) {
           if (controller.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
+            return Center(
+              child: CircularProgressIndicator(
+                color: context.isDark ? AppColors.primaryLight : AppColors.primary,
+              ),
             );
           }
 
@@ -159,7 +176,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
           final double filteredTotal = filteredReceipts.fold(0.0, (sum, item) => sum + item.total);
 
           return RefreshIndicator(
-            color: AppColors.primary,
+            color: context.isDark ? AppColors.primaryLight : AppColors.primary,
             onRefresh: () => controller.loadReceipts(),
             child: Column(
               children: [
@@ -168,19 +185,20 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardBg,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(color: context.borderColor),
                     ),
                     child: TextField(
                       controller: _searchController,
+                      style: TextStyle(color: context.textPrimary, fontSize: 14),
                       decoration: InputDecoration(
                         hintText: 'Tìm theo cửa hàng hoặc ghi chú...',
-                        hintStyle: const TextStyle(fontSize: 14, color: AppColors.textMuted),
-                        prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textSecondary, size: 22),
+                        hintStyle: TextStyle(fontSize: 14, color: context.textMuted),
+                        prefixIcon: Icon(Icons.search_rounded, color: context.textSecondary, size: 22),
                         suffixIcon: _searchQuery.isNotEmpty
                             ? IconButton(
-                                icon: const Icon(Icons.close_rounded, size: 20),
+                                icon: Icon(Icons.close_rounded, size: 20, color: context.textSecondary),
                                 onPressed: () {
                                   _searchController.clear();
                                 },
@@ -314,10 +332,10 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? color : Colors.white,
+          color: isSelected ? color : context.cardBg,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? color : AppColors.border,
+            color: isSelected ? color : context.borderColor,
             width: 1.2,
           ),
           boxShadow: isSelected
@@ -344,7 +362,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
               style: TextStyle(
                 fontSize: 12.5,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? Colors.white : AppColors.textPrimary,
+                color: isSelected ? Colors.white : context.textPrimary,
               ),
             ),
             if (count > 0) ...[
@@ -352,7 +370,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.white.withValues(alpha: 0.25) : AppColors.surfaceVariant,
+                  color: isSelected ? Colors.white.withValues(alpha: 0.25) : context.surfaceVariantBg,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -360,7 +378,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: isSelected ? Colors.white : AppColors.textSecondary,
+                    color: isSelected ? Colors.white : context.textSecondary,
                   ),
                 ),
               ),
@@ -440,9 +458,9 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardBg,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.borderColor),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),
@@ -483,10 +501,10 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
                     children: [
                       Text(
                         receipt.merchant,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: context.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -503,13 +521,13 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          const Text('•', style: TextStyle(color: AppColors.textMuted)),
+                          Text('•', style: TextStyle(color: context.textMuted)),
                           const SizedBox(width: 6),
                           Text(
                             AppFormatter.formatDate(receipt.date),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.textSecondary,
+                              color: context.textSecondary,
                             ),
                           ),
                         ],
@@ -518,9 +536,9 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
                         const SizedBox(height: 4),
                         Text(
                           receipt.note!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textMuted,
+                            color: context.textMuted,
                             fontStyle: FontStyle.italic,
                           ),
                           maxLines: 1,
@@ -537,17 +555,17 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
                   children: [
                     Text(
                       AppFormatter.formatCurrency(receipt.total),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.primary,
+                        color: context.isDark ? AppColors.primaryLight : AppColors.primary,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Icon(
+                    Icon(
                       Icons.chevron_right_rounded,
                       size: 18,
-                      color: AppColors.textMuted,
+                      color: context.textMuted,
                     ),
                   ],
                 ),
@@ -570,30 +588,30 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
               Container(
                 width: 80,
                 height: 80,
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryContainer,
+                decoration: BoxDecoration(
+                  color: context.isDark ? AppColors.primaryContainerDark : AppColors.primaryContainer,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.receipt_long_rounded,
                   size: 40,
-                  color: AppColors.primary,
+                  color: context.isDark ? AppColors.primaryLight : AppColors.primary,
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Chưa có hóa đơn nào',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+                  color: context.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Bắt đầu bằng việc quét hóa đơn đầu tiên từ camera hoặc thư viện ảnh.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                style: TextStyle(fontSize: 14, color: context.textSecondary),
               ),
               const SizedBox(height: 24),
               ElevatedButton.icon(
@@ -630,29 +648,29 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariant,
+                color: context.surfaceVariantBg,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.search_off_rounded,
                 size: 36,
-                color: AppColors.textSecondary,
+                color: context.textSecondary,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Không tìm thấy hóa đơn',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+                color: context.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Không có hóa đơn nào khớp với bộ lọc hoặc từ khóa tìm kiếm của bạn.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: 13, color: context.textSecondary),
             ),
             const SizedBox(height: 20),
             OutlinedButton.icon(

@@ -27,9 +27,9 @@ class CategoryBreakdownItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +43,7 @@ class CategoryBreakdownItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: rank == 1
                       ? AppColors.accent.withValues(alpha: 0.2)
-                      : AppColors.surfaceVariant,
+                      : context.surfaceVariantBg,
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
@@ -52,7 +52,7 @@ class CategoryBreakdownItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: rank == 1 ? AppColors.accent : AppColors.textSecondary,
+                    color: rank == 1 ? AppColors.accent : context.textSecondary,
                   ),
                 ),
               ),
@@ -73,10 +73,10 @@ class CategoryBreakdownItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   category,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14.5,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: context.textPrimary,
                   ),
                 ),
               ),
@@ -87,10 +87,10 @@ class CategoryBreakdownItem extends StatelessWidget {
                 children: [
                   Text(
                     AppFormatter.formatCurrency(amount),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
+                      color: context.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -113,7 +113,7 @@ class CategoryBreakdownItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: Container(
               height: 6,
-              color: AppColors.surfaceVariant,
+              color: context.surfaceVariantBg,
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
                 widthFactor: (percentage / 100).clamp(0.0, 1.0),

@@ -27,9 +27,9 @@ class RecentReceiptItem extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardBg,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.borderColor),
         ),
         child: Row(
           children: [
@@ -51,10 +51,10 @@ class RecentReceiptItem extends StatelessWidget {
                 children: [
                   Text(
                     receipt.merchant,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: context.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -71,16 +71,16 @@ class RecentReceiptItem extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      const Text(
+                      Text(
                         '•',
-                        style: TextStyle(color: AppColors.textMuted),
+                        style: TextStyle(color: context.textMuted),
                       ),
                       const SizedBox(width: 6),
                       Text(
                         AppFormatter.formatDate(receipt.date),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: AppColors.textSecondary,
+                          color: context.textSecondary,
                         ),
                       ),
                     ],
@@ -92,10 +92,10 @@ class RecentReceiptItem extends StatelessWidget {
             // Số tiền
             Text(
               AppFormatter.formatCurrency(receipt.total),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
-                color: AppColors.primary,
+                color: context.isDark ? AppColors.primaryLight : AppColors.primary,
               ),
             ),
           ],

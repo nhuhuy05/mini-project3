@@ -4,6 +4,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/services/receipt_controller.dart';
 import '../../../core/utils/currency_formatter.dart';
+import '../../../core/widgets/theme_toggle_button.dart';
 import '../../receipt/screens/receipt_detail_screen.dart';
 import '../../scan/screens/camera_scan_screen.dart';
 import '../widgets/quick_stat_card.dart';
@@ -27,7 +28,7 @@ class HomeScreen extends StatelessWidget {
     final controller = ReceiptController.instance;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.scaffoldBg,
       body: SafeArea(
         child: ListenableBuilder(
           listenable: controller,
@@ -64,41 +65,49 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Text(
+                              Text(
                                 AppConstants.appName,
                                 style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.w800,
-                                  color: AppColors.textPrimary,
+                                  color: context.textPrimary,
                                   letterSpacing: -0.5,
                                 ),
                               ),
                             ],
                           ),
                           const SizedBox(height: 4),
-                          const Text(
+                          Text(
                             AppConstants.appTagline,
                             style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.textSecondary,
+                              color: context.textSecondary,
                             ),
                           ),
                         ],
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.border),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.info_outline_rounded,
-                            color: AppColors.primary,
+                      Row(
+                        children: [
+                          // Nút chuyển đổi Light/Dark mode
+                          const ThemeToggleButton(),
+                          const SizedBox(width: 8),
+                          // Nút thông tin đồ án & dữ liệu
+                          Container(
+                            decoration: BoxDecoration(
+                              color: context.cardBg,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: context.borderColor),
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.info_outline_rounded,
+                                color: context.isDark ? AppColors.primaryLight : AppColors.primary,
+                              ),
+                              onPressed: () => _showProjectInfoModal(context),
+                              tooltip: 'Thông tin đồ án & Quản lý dữ liệu',
+                            ),
                           ),
-                          onPressed: () => _showProjectInfoModal(context),
-                          tooltip: 'Thông tin đồ án & Quản lý dữ liệu',
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -180,12 +189,12 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Hóa đơn gần đây',
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.textPrimary,
                         ),
                       ),
                       TextButton(
@@ -194,7 +203,7 @@ class HomeScreen extends StatelessWidget {
                             onNavigateToExpenses!();
                           }
                         },
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
@@ -202,14 +211,14 @@ class HomeScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.primary,
+                                color: context.isDark ? AppColors.primaryLight : AppColors.primary,
                               ),
                             ),
-                            SizedBox(width: 2),
+                            const SizedBox(width: 2),
                             Icon(
                               Icons.arrow_forward_ios_rounded,
                               size: 12,
-                              color: AppColors.primary,
+                              color: context.isDark ? AppColors.primaryLight : AppColors.primary,
                             ),
                           ],
                         ),
@@ -220,10 +229,12 @@ class HomeScreen extends StatelessWidget {
 
                   // Danh sách hóa đơn thực tế từ SQLite (lấy tối đa 5 hóa đơn mới nhất)
                   if (controller.isLoading)
-                    const Center(
+                    Center(
                       child: Padding(
-                        padding: EdgeInsets.all(32.0),
-                        child: CircularProgressIndicator(color: AppColors.primary),
+                        padding: const EdgeInsets.all(32.0),
+                        child: CircularProgressIndicator(
+                          color: context.isDark ? AppColors.primaryLight : AppColors.primary,
+                        ),
                       ),
                     )
                   else if (receipts.isEmpty)
@@ -231,17 +242,17 @@ class HomeScreen extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.cardBg,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: context.borderColor),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.receipt_long_outlined, size: 40, color: AppColors.textMuted),
-                          SizedBox(height: 8),
+                          Icon(Icons.receipt_long_outlined, size: 40, color: context.textMuted),
+                          const SizedBox(height: 8),
                           Text(
                             'Chưa có hóa đơn nào',
-                            style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.textSecondary),
+                            style: TextStyle(fontWeight: FontWeight.w600, color: context.textSecondary),
                           ),
                         ],
                       ),
@@ -282,9 +293,9 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: BoxDecoration(
+          color: context.cardBg,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -295,7 +306,7 @@ class HomeScreen extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.border,
+                  color: context.borderColor,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -306,17 +317,17 @@ class HomeScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryContainer,
+                    color: context.isDark ? AppColors.primaryContainerDark : AppColors.primaryContainer,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.document_scanner_rounded,
-                    color: AppColors.primary,
+                    color: context.isDark ? AppColors.primaryLight : AppColors.primary,
                     size: 26,
                   ),
                 ),
                 const SizedBox(width: 14),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -325,12 +336,12 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.textPrimary,
                         ),
                       ),
                       Text(
                         'Phiên bản 1.0.0 • Đồ án tốt nghiệp',
-                        style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                        style: TextStyle(fontSize: 12, color: context.textSecondary),
                       ),
                     ],
                   ),
@@ -341,7 +352,7 @@ class HomeScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariant,
+                color: context.surfaceVariantBg,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: const Column(
@@ -452,7 +463,11 @@ class _InfoFeatureRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.primary, size: 20),
+        Icon(
+          icon,
+          color: context.isDark ? AppColors.primaryLight : AppColors.primary,
+          size: 20,
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -460,17 +475,17 @@ class _InfoFeatureRow extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+                  color: context.textPrimary,
                 ),
               ),
               Text(
                 desc,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11.5,
-                  color: AppColors.textSecondary,
+                  color: context.textSecondary,
                 ),
               ),
             ],

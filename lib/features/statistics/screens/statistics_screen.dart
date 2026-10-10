@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/services/receipt_controller.dart';
+import '../../../core/theme/theme_controller.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../data/models/receipt_model.dart';
 import '../../scan/screens/camera_scan_screen.dart';
@@ -108,16 +109,34 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     final controller = ReceiptController.instance;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.scaffoldBg,
       appBar: AppBar(
-        title: const Text('Thống Kê Chi Tiêu'),
+        title: Text(
+          'Thống Kê Chi Tiêu',
+          style: TextStyle(
+            color: context.textPrimary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              context.isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+              color: context.isDark ? const Color(0xFFFBBF24) : AppColors.primary,
+            ),
+            tooltip: context.isDark ? 'Chế độ Sáng' : 'Chế độ Tối',
+            onPressed: () => ThemeController.instance.toggleTheme(),
+          ),
+        ],
       ),
       body: ListenableBuilder(
         listenable: controller,
         builder: (context, _) {
           if (controller.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
+            return Center(
+              child: CircularProgressIndicator(
+                color: context.isDark ? AppColors.primaryLight : AppColors.primary,
+              ),
             );
           }
 
@@ -155,7 +174,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             ..sort((a, b) => b.value.compareTo(a.value));
 
           return RefreshIndicator(
-            color: AppColors.primary,
+            color: context.isDark ? AppColors.primaryLight : AppColors.primary,
             onRefresh: () => controller.loadReceipts(),
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -166,7 +185,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceVariant,
+                      color: context.surfaceVariantBg,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Row(
@@ -183,7 +202,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               duration: const Duration(milliseconds: 200),
                               padding: const EdgeInsets.symmetric(vertical: 9),
                               decoration: BoxDecoration(
-                                color: isSelected ? Colors.white : Colors.transparent,
+                                color: isSelected ? context.cardBg : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: isSelected
                                     ? [
@@ -201,7 +220,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                                  color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                                  color: isSelected
+                                      ? (context.isDark ? AppColors.primaryLight : AppColors.primary)
+                                      : context.textSecondary,
                                 ),
                               ),
                             ),
@@ -268,9 +289,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardBg,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(color: context.borderColor),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -278,19 +299,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'Xếp hạng chi tiêu',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimary,
+                                color: context.textPrimary,
                               ),
                             ),
                             Text(
                               '${rankedCategories.length} danh mục',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12.5,
-                                color: AppColors.textSecondary,
+                                color: context.textSecondary,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -368,92 +389,96 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     required Color color,
     bool isFullWidth = false,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: isFullWidth
-          ? Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(icon, color: color, size: 22),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+    return Builder(
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: context.cardBg,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: context.borderColor),
+          ),
+          child: isFullWidth
+              ? Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      child: Icon(icon, color: color, size: 22),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyle(fontSize: 12.5, color: context.textSecondary),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            value,
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              color: color,
+                            ),
+                          ),
+                          if (subtitle != null) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              subtitle,
+                              style: TextStyle(fontSize: 11.5, color: context.textMuted),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(icon, color: color, size: 18),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      title,
+                      style: TextStyle(fontSize: 12, color: context.textSecondary),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      value,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: color,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (subtitle != null) ...[
                       const SizedBox(height: 2),
                       Text(
-                        value,
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          color: color,
-                        ),
+                        subtitle,
+                        style: TextStyle(fontSize: 11, color: context.textMuted),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      if (subtitle != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          subtitle,
-                          style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted),
-                        ),
-                      ],
                     ],
-                  ),
+                  ],
                 ),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(icon, color: color, size: 18),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: color,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (subtitle != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ],
-            ),
+        );
+      },
     );
   }
 }
