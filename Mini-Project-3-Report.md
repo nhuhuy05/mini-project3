@@ -8,7 +8,7 @@
 
 ## 1. GENERAL INFORMATION & DELIVERABLE LINKS
 * **Team Members:** Nguyễn Như Huy — Student ID: 23IT.B077
-* **🔗 Live Demo URL:** [https://your-demo.pages.dev or Expo Snack / APK Download Link]
+* **🔗 Live Demo URL:** https://github.com/nhuhuy05/mini-project3/releases/download/v1.0.0/app-release.apk
 * **💻 GitHub Repository:** https://github.com/nhuhuy05/mini-project3
 ---
 
