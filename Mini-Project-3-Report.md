@@ -7,12 +7,9 @@
 ---
 
 ## 1. GENERAL INFORMATION & DELIVERABLE LINKS
-* **Team Members:**
-  1. Nguyễn Như Huy — Student ID: 23IT.B077 — Role: Fullstack Developer — Contribution: 100%
-* **🔗 Live Demo URL:** [Chạy cục bộ trên điện thoại Android / Máy ảo LDPlayer]
+* **Team Members:** Nguyễn Như Huy — Student ID: 23IT.B077
+* **🔗 Live Demo URL:** [https://your-demo.pages.dev or Expo Snack / APK Download Link]
 * **💻 GitHub Repository:** https://github.com/nhuhuy05/mini-project3
-* **🎥 Video Demo (Optional):** [Link Video demo nếu có]
-
 ---
 
 ## 2. FEATURE IMPLEMENTATION CHECKLIST
@@ -37,21 +34,14 @@
 ---
 
 ## 4. EMPIRICAL EVIDENCE & SCREENSHOTS
-* **Figure 1: Màn hình Dashboard & Thống kê nhanh (Home Screen)**
-  * *Mô tả:* Hiển thị thẻ số liệu chi tiêu tháng/tuần từ SQLite, banner kêu gọi quét hóa đơn và danh sách các hóa đơn gần đây.
-  * *(Chèn ảnh chụp màn hình Dashboard tại đây)*
 
-* **Figure 2: Màn hình Quét hóa đơn & Bóc tách On-Device OCR**
-  * *Mô tả:* Khung ngắm chụp ảnh trực tiếp (Viewfinder), hỗ trợ flash, chạm lấy nét, cắt xén ảnh (crop) và màn hình nhận diện chữ Google ML Kit.
-  * *(Chèn ảnh chụp màn hình Camera / OCR Scan tại đây)*
+| Figure 1: Dashboard & Thống kê nhanh (Home Screen) | Figure 2: Phân tích On-Device OCR (Scanning Screen) |
+|:---:|:---:|
+| <img src="image.png" width="280" alt="Dashboard Screen" /><br><br><b>Mô tả:</b> Màn hình Dashboard hiển thị thẻ chi tiêu tháng/tuần từ SQLite, banner gradient quét hóa đơn và hóa đơn gần đây (Dark Mode trên LDPlayer). | <img src="image-1.png" width="280" alt="OCR Scan Screen" /><br><br><b>Mô tả:</b> Tiến trình trích xuất ký tự quang học offline bằng Google ML Kit, tự động tìm và bóc tách thông tin từ ảnh chụp hóa đơn WinMart. |
 
-* **Figure 3: Lịch sử chi tiêu & Bộ lọc đa năng (Expense History)**
-  * *Mô tả:* Danh sách hóa đơn chi tiết hỗ trợ tìm kiếm thời gian thực, lọc theo chip danh mục, sắp xếp đa chiều và thao tác vuốt để xóa (Dismissible).
-  * *(Chèn ảnh chụp màn hình Lịch sử chi tiêu tại đây)*
-
-* **Figure 4: Biểu đồ CustomPainter & Chế độ Giao diện Tối (Dark Mode)**
-  * *Mô tả:* Biểu đồ Donut tương tác và biểu đồ cột tuần vẽ thuần bằng Canvas API, chuyển đổi giao diện sang Dark Mode Material 3 mượt mà.
-  * *(Chèn ảnh chụp màn hình Biểu đồ / Dark Mode tại đây)*
+| Figure 3: Xác nhận & Chỉnh sửa (Receipt Review) | Figure 4: Biểu đồ CustomPainter (Dark Mode) |
+|:---:|:---:|
+| <img src="image-3.png" width="280" alt="Receipt Review Screen" /><br><br><b>Mô tả:</b> Màn hình đối chiếu ảnh gốc, kiểm tra kết quả bóc tách (Cửa hàng: WINMART, 25/04/2026, 237.576 VNĐ, Thực phẩm) trước khi lưu SQLite. | <img src="image-4.png" width="280" alt="Statistics Screen" /><br><br><b>Mô tả:</b> Biểu đồ vành khăn (CategoryDonutChart) vẽ thuần bằng Canvas API trực quan hóa tỷ trọng chi tiêu các danh mục trong chế độ Dark Mode. |
 
 ---
 
