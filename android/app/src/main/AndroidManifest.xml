@@ -4,7 +4,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
     <application
-        android:label="bill_lens"
+        android:label="SpendWise"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

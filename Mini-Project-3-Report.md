@@ -1,6 +1,6 @@
 # MINI-PROJECT SHORT TECHNICAL REPORT
 **Course:** Cross-Platform Mobile App Development (VKU)
-**Mini-Project Title:** Mini-Project 3 - BillLens (Smart Receipt & Expense Tracker)
+**Mini-Project Title:** Mini-Project 3 - SpendWise (Smart Receipt & Expense Tracker)
 **Student Name:** Nguyễn Như Huy
 **Submission Date:** 09/10/2026
 

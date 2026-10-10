@@ -13,5 +13,5 @@ void main() {
     ),
   );
 
-  runApp(const BillLensApp());
+  runApp(const SpendWiseApp());
 }

@@ -1,35 +1,43 @@
 import 'package:flutter/material.dart';
 
-/// Bảng màu chuẩn của ứng dụng BillLens
-/// Đã được đổi sang tông màu Tím sẫm (Indigo / Deep Purple)
-/// mang lại cảm giác sang trọng, cao cấp và huyền bí.
+/// Bảng màu chuẩn của ứng dụng SpendWise
+/// Sử dụng tông màu Tím Hoàng Gia (Royal Violet) kết hợp Hồng Neon (Fuchsia/Rose)
+/// mang lại diện mạo tài chính thông minh, đẳng cấp và hoàn toàn khác biệt bản cũ.
 class AppColors {
   AppColors._();
 
-  // Primary palette (Tím / Indigo)
-  static const Color primary = Color(0xFF4F46E5); // Indigo 600
-  static const Color primaryLight = Color(0xFF818CF8); // Indigo 400
-  static const Color primaryDark = Color(0xFF3730A3); // Indigo 800
-  static const Color primaryContainer = Color(0xFFE0E7FF); // Indigo 100
-  static const Color primaryContainerDark = Color(0xFF312E81); // Indigo 900
+  // Primary palette (Tím Hoàng Gia - Royal Violet)
+  static const Color primary = Color(0xFF7C3AED); // Violet 600
+  static const Color primaryLight = Color(0xFFA78BFA); // Violet 400
+  static const Color primaryDark = Color(0xFF5B21B6); // Violet 800
+  static const Color primaryContainer = Color(0xFFEDE9FE); // Violet 100
+  static const Color primaryContainerDark = Color(0xFF2E1065); // Violet 950
 
-  // Secondary & Accent (Màu bổ trợ)
-  static const Color secondary = Color(0xFFE11D48); // Rose 600
+  // Secondary & Accent (Hồng Neon & Cam Hổ Phách)
+  static const Color secondary = Color(0xFFF43F5E); // Rose 500
+  static const Color secondaryLight = Color(0xFFFB7185); // Rose 400
   static const Color accent = Color(0xFFF59E0B); // Amber 500
 
+  // Gradient màu chuẩn cho Scan Banner & Action Cards
+  static const List<Color> bannerGradient = [
+    Color(0xFF6D28D9), // Deep Royal Violet
+    Color(0xFF8B5CF6), // Bright Violet
+    Color(0xFFC026D3), // Vivid Fuchsia
+  ];
+
   // Neutral colors (Chế độ Sáng - Light Mode)
-  static const Color background = Color(0xFFF1F5F9); // Slate 100
+  static const Color background = Color(0xFFF8FAFC); // Slate 50
   static const Color surface = Colors.white;
-  static const Color surfaceVariant = Color(0xFFF8FAFC); // Slate 50
+  static const Color surfaceVariant = Color(0xFFF1F5F9); // Slate 100
   static const Color cardBg = Colors.white;
-  static const Color border = Color(0xFFCBD5E1); // Slate 300
+  static const Color border = Color(0xFFE2E8F0); // Slate 200
 
   // Neutral colors (Chế độ Tối - Dark Mode)
-  static const Color darkBackground = Color(0xFF0F172A); // Slate 900 (Nền chính tối)
-  static const Color darkSurface = Color(0xFF1E293B); // Slate 800 (Bề mặt component tối)
-  static const Color darkSurfaceVariant = Color(0xFF334155); // Slate 700 (Thanh track, chip tối)
-  static const Color darkCardBg = Color(0xFF1E293B); // Slate 800 (Nền thẻ tối)
-  static const Color darkBorder = Color(0xFF334155); // Slate 700 (Đường viền tối)
+  static const Color darkBackground = Color(0xFF0F172A); // Slate 900
+  static const Color darkSurface = Color(0xFF1E293B); // Slate 800
+  static const Color darkSurfaceVariant = Color(0xFF334155); // Slate 700
+  static const Color darkCardBg = Color(0xFF1E293B); // Slate 800
+  static const Color darkBorder = Color(0xFF334155); // Slate 700
 
   // Text colors (Chế độ Sáng)
   static const Color textPrimary = Color(0xFF0F172A); // Slate 900

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// Các hằng số dùng chung trong toàn bộ ứng dụng BillLens
+/// Các hằng số dùng chung trong toàn bộ ứng dụng SpendWise
 class AppConstants {
   AppConstants._();
 
-  static const String appName = 'BillLens';
-  static const String appTagline = 'Quản lý chi tiêu & hóa đơn thông minh';
+  static const String appName = 'SpendWise';
+  static const String appTagline = 'Quản lý chi tiêu & Quét hóa đơn thông minh';
 
   /// Danh sách danh mục chi tiêu mặc định theo yêu cầu của đồ án
   static const List<String> categories = [

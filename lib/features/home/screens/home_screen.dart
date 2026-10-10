@@ -11,7 +11,7 @@ import '../widgets/quick_stat_card.dart';
 import '../widgets/recent_receipt_item.dart';
 import '../widgets/scan_action_banner.dart';
 
-/// Màn hình Trang chủ (Dashboard) chính của BillLens - Cập nhật UI mới
+/// Màn hình Trang chủ (Dashboard) chính của SpendWise - Giao diện mới
 /// Kết nối động với SQLite qua ReceiptController
 class HomeScreen extends StatelessWidget {
   final VoidCallback? onNavigateToScan;
@@ -46,47 +46,58 @@ class HomeScreen extends StatelessWidget {
                   // Header chào mừng
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary,
-                                  borderRadius: BorderRadius.circular(8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(
+                                    Icons.document_scanner_rounded,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
                                 ),
-                                child: const Icon(
-                                  Icons.document_scanner_rounded,
-                                  color: Colors.white,
-                                  size: 18,
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    AppConstants.appName,
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w800,
+                                      color: context.textPrimary,
+                                      letterSpacing: -0.5,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                AppConstants.appName,
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w800,
-                                  color: context.textPrimary,
-                                  letterSpacing: -0.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            AppConstants.appTagline,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: context.textSecondary,
+                              ],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 4),
+                            Text(
+                              AppConstants.appTagline,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: context.textSecondary,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
+                      const SizedBox(width: 8),
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           // Nút chuyển đổi Light/Dark mode
                           const ThemeToggleButton(),
@@ -332,7 +343,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'BillLens – Smart Expense',
+                        'SpendWise – Smart Expense',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,

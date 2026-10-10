@@ -8,9 +8,9 @@ import 'features/home/screens/home_screen.dart';
 import 'features/scan/screens/camera_scan_screen.dart';
 import 'features/statistics/screens/statistics_screen.dart';
 
-/// App Root Widget của BillLens
-class BillLensApp extends StatelessWidget {
-  const BillLensApp({super.key});
+/// App Root Widget của SpendWise
+class SpendWiseApp extends StatelessWidget {
+  const SpendWiseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class BillLensApp extends StatelessWidget {
       listenable: ThemeController.instance,
       builder: (context, _) {
         return MaterialApp(
-          title: 'BillLens',
+          title: 'SpendWise',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
@@ -29,6 +29,9 @@ class BillLensApp extends StatelessWidget {
     );
   }
 }
+
+/// Alias tương thích ngược
+typedef BillLensApp = SpendWiseApp;
 
 /// Khung điều hướng chính với NavigationBar 3 tab và nút Quét nổi bật
 class MainNavigationShell extends StatefulWidget {

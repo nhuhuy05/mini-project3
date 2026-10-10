@@ -1,4 +1,4 @@
-# 📱 BillLens – Smart Receipt & Expense Tracker
+# 📱 SpendWise – Smart Receipt & Expense Tracker
 > **Ứng dụng di động theo dõi chi tiêu & quản lý hóa đơn thông minh**  
 > Xây dựng bằng **Flutter & Dart**, ứng dụng **On-Device OCR (Google ML Kit)** và trực quan hóa dữ liệu thuần **CustomPainter**.
 
@@ -13,7 +13,7 @@
 
 ## 🌟 1. Giới thiệu tổng quan (Project Overview)
 
-**BillLens** là đồ án ứng dụng di động hoàn chỉnh giải quyết bài toán quản lý tài chính cá nhân một cách tự động, bảo mật và tiện lợi. 
+**SpendWise** là đồ án ứng dụng di động hoàn chỉnh giải quyết bài toán quản lý tài chính cá nhân một cách tự động, bảo mật và tiện lợi. 
 
 Thay vì phải nhập thủ công từng khoản chi, người dùng chỉ cần chụp ảnh hoặc chọn ảnh hóa đơn bán lẻ, hệ thống trí tuệ nhân tạo chạy trực tiếp trên thiết bị (**On-Device AI**) sẽ nhận diện ký tự quang học (**OCR**), trích xuất thông tin trọng yếu (Tên cửa hàng, Ngày giao dịch, Tổng tiền) và trực quan hóa báo cáo tài chính bằng các biểu đồ tương tác sinh động.
 
@@ -193,7 +193,7 @@ Dự án bao gồm bộ Unit Test hoàn chỉnh bao phủ toàn bộ các tầng
   - ✅ Xóa hóa đơn (`Delete`).
   - ✅ Thống kê tổng tiền theo từng danh mục (`GetTotalsByCategory`).
 - `test/widget_test.dart`:
-  - ✅ Smoke test khởi chạy giao diện `BillLensApp`.
+  - ✅ Smoke test khởi chạy giao diện `SpendWiseApp`.
 
 ---
 
@@ -202,6 +202,6 @@ Dự án bao gồm bộ Unit Test hoàn chỉnh bao phủ toàn bộ các tầng
 - **Mã số sinh viên (MSSV)**: 23IT.B077
 - **Lớp**: 23IT
 - **Học phần**: Phát triển ứng dụng di động đa nền tảng (Cross-Platform Mobile App Development) - VKU
-- **Ứng dụng**: BillLens – Smart Receipt & Expense Tracker
+- **Ứng dụng**: SpendWise – Smart Receipt & Expense Tracker
 - **Ngôn ngữ & Nền tảng**: Dart & Flutter
 - **Repository**: [https://github.com/nhuhuy05/mini-project3](https://github.com/nhuhuy05/mini-project3)

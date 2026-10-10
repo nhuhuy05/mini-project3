@@ -8,12 +8,12 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   });
 
-  testWidgets('BillLens app smoke test', (WidgetTester tester) async {
+  testWidgets('SpendWise app smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const BillLensApp());
+    await tester.pumpWidget(const SpendWiseApp());
 
-    // Verify that BillLens dashboard loads properly
-    expect(find.text('BillLens'), findsOneWidget);
+    // Verify that SpendWise dashboard loads properly
+    expect(find.text('SpendWise'), findsOneWidget);
     expect(find.text('Chi tiêu tháng này'), findsOneWidget);
     expect(find.text('Quét hóa đơn ngay'), findsOneWidget);
   });

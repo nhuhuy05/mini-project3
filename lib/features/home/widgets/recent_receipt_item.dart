@@ -62,12 +62,16 @@ class RecentReceiptItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text(
-                        receipt.category,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: categoryColor,
+                      Flexible(
+                        child: Text(
+                          receipt.category,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: categoryColor,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -88,6 +92,7 @@ class RecentReceiptItem extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(width: 10),
 
             // Số tiền
             Text(
