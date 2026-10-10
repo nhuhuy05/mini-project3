@@ -115,8 +115,10 @@ class _WeeklyExpenseChartState extends State<WeeklyExpenseChart>
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '7 ngày gần nhất',
-                    style: TextStyle(fontSize: 12, color: context.textSecondary),
+                    widget.weeklyData.isNotEmpty
+                        ? 'Thứ 2 - CN (${AppFormatter.formatDate(widget.weeklyData.first.date)} - ${AppFormatter.formatDate(widget.weeklyData.last.date)})'
+                        : 'Thứ 2 - Chủ nhật',
+                    style: TextStyle(fontSize: 11.5, color: context.textSecondary),
                   ),
                 ],
               ),

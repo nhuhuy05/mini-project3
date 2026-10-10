@@ -36,21 +36,26 @@ class StatisticsScreen extends StatefulWidget {
 class _StatisticsScreenState extends State<StatisticsScreen> {
   StatPeriod _selectedPeriod = StatPeriod.month;
 
-  /// Lọc hóa đơn theo chu kỳ thời gian đã chọn
+  /// Lọc hóa đơn theo chu kỳ thời gian đã chọn (chuẩn xác theo ngày)
   List<ReceiptModel> _filterReceiptsByPeriod(List<ReceiptModel> allReceipts) {
     final now = DateTime.now();
 
     switch (_selectedPeriod) {
       case StatPeriod.week:
-        // Thứ 2 đầu tuần hiện tại
+        // Thứ 2 đầu tuần hiện tại đến hết Chủ nhật tuần này
         final startOfWeek = DateTime(now.year, now.month, now.day - (now.weekday - 1));
-        final endOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day + 6, 23, 59, 59);
-        return allReceipts.where((r) => r.date.isAfter(startOfWeek.subtract(const Duration(seconds: 1))) && r.date.isBefore(endOfWeek.add(const Duration(seconds: 1)))).toList();
+        final nextWeekStart = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day + 7);
+        return allReceipts.where((r) {
+          final d = DateTime(r.date.year, r.date.month, r.date.day);
+          return (d.isAtSameMomentAs(startOfWeek) || d.isAfter(startOfWeek)) &&
+                 d.isBefore(nextWeekStart);
+        }).toList();
 
       case StatPeriod.month:
-        final startOfMonth = DateTime(now.year, now.month, 1);
-        final endOfMonth = DateTime(now.year, now.month + 1, 0, 23, 59, 59);
-        return allReceipts.where((r) => r.date.isAfter(startOfMonth.subtract(const Duration(seconds: 1))) && r.date.isBefore(endOfMonth.add(const Duration(seconds: 1)))).toList();
+        // Hóa đơn trong tháng hiện tại
+        return allReceipts.where((r) =>
+          r.date.year == now.year && r.date.month == now.month
+        ).toList();
 
       case StatPeriod.all:
         return allReceipts;
@@ -70,33 +75,30 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     return map;
   }
 
-  /// Tạo dữ liệu 7 ngày gần nhất phục vụ WeeklyBarChart
+  /// Tạo dữ liệu 7 ngày Thứ 2 -> Chủ nhật của tuần này phục vụ WeeklyBarChart
   List<DayExpenseData> _buildWeeklyData(List<ReceiptModel> allReceipts) {
     final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+    // Thứ 2 đầu tuần hiện tại
+    final startOfWeek = DateTime(now.year, now.month, now.day - (now.weekday - 1));
     final List<DayExpenseData> list = [];
-
     final dayLabels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 
-    // 7 ngày kết thúc vào hôm nay
-    for (int i = 6; i >= 0; i--) {
-      final date = today.subtract(Duration(days: i));
-      final nextDate = date.add(const Duration(days: 1));
-
+    for (int i = 0; i < 7; i++) {
+      final date = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day + i);
       final dayReceipts = allReceipts.where((r) =>
-          r.date.isAfter(date.subtract(const Duration(seconds: 1))) &&
-          r.date.isBefore(nextDate));
+          r.date.year == date.year &&
+          r.date.month == date.month &&
+          r.date.day == date.day);
 
       final total = dayReceipts.fold(0.0, (sum, r) => sum + r.total);
-      final weekdayIndex = date.weekday - 1; // 1 = Mon -> 0
-      final label = dayLabels[weekdayIndex];
+      final isToday = date.year == now.year && date.month == now.month && date.day == now.day;
 
       list.add(
         DayExpenseData(
           date: date,
-          label: label,
+          label: dayLabels[i],
           amount: total,
-          isToday: i == 0,
+          isToday: isToday,
         ),
       );
     }
@@ -156,16 +158,23 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             }
           });
 
-          // Tính trung bình mỗi ngày
-          int daysInPeriod = 1;
-          if (_selectedPeriod == StatPeriod.week) {
-            daysInPeriod = 7;
-          } else if (_selectedPeriod == StatPeriod.month) {
-            daysInPeriod = DateTime.now().day;
-          } else {
-            daysInPeriod = 30;
+          // Tính trung bình mỗi ngày chuẩn xác
+          final now = DateTime.now();
+          double dailyAverage = 0.0;
+          if (filteredReceipts.isNotEmpty) {
+            int daysCount = 1;
+            if (_selectedPeriod == StatPeriod.week) {
+              daysCount = now.weekday; // Số ngày đã trôi qua trong tuần từ T2 đến nay
+            } else if (_selectedPeriod == StatPeriod.month) {
+              daysCount = now.day; // Số ngày đã trôi qua trong tháng đến nay
+            } else {
+              final dates = filteredReceipts
+                  .map((r) => '${r.date.year}-${r.date.month}-${r.date.day}')
+                  .toSet();
+              daysCount = dates.length; // Số ngày thực tế có chi tiêu
+            }
+            dailyAverage = totalExpense / (daysCount > 0 ? daysCount : 1);
           }
-          final double dailyAverage = totalExpense / (daysInPeriod > 0 ? daysInPeriod : 1);
 
           // Bảng xếp hạng danh mục
           final rankedCategories = categoryTotals.entries

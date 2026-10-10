@@ -81,30 +81,30 @@ class ReceiptRepository {
   Future<double> getTotalThisMonth({DateTime? referenceDate}) async {
     final now = referenceDate ?? DateTime.now();
     final startOfMonth = DateTime(now.year, now.month, 1);
-    final endOfMonth = DateTime(now.year, now.month + 1, 0, 23, 59, 59);
+    final nextMonthStart = DateTime(now.year, now.month + 1, 1);
 
     final db = await _dbProvider.database;
     final result = await db.rawQuery('''
       SELECT SUM(total) as sumTotal FROM ${AppDatabase.tableReceipts}
-      WHERE date >= ? AND date <= ?
-    ''', [startOfMonth.toIso8601String(), endOfMonth.toIso8601String()]);
+      WHERE date >= ? AND date < ?
+    ''', [startOfMonth.toIso8601String(), nextMonthStart.toIso8601String()]);
 
     final sum = result.first['sumTotal'];
     return (sum as num?)?.toDouble() ?? 0.0;
   }
 
-  /// Tính tổng chi tiêu trong tuần hiện tại (7 ngày gần nhất)
+  /// Tính tổng chi tiêu trong tuần hiện tại (Thứ 2 đến hết Chủ Nhật)
   Future<double> getTotalThisWeek({DateTime? referenceDate}) async {
     final now = referenceDate ?? DateTime.now();
     // Đầu tuần (Thứ 2)
     final startOfWeek = DateTime(now.year, now.month, now.day - (now.weekday - 1));
-    final endOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day + 6, 23, 59, 59);
+    final nextWeekStart = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day + 7);
 
     final db = await _dbProvider.database;
     final result = await db.rawQuery('''
       SELECT SUM(total) as sumTotal FROM ${AppDatabase.tableReceipts}
-      WHERE date >= ? AND date <= ?
-    ''', [startOfWeek.toIso8601String(), endOfWeek.toIso8601String()]);
+      WHERE date >= ? AND date < ?
+    ''', [startOfWeek.toIso8601String(), nextWeekStart.toIso8601String()]);
 
     final sum = result.first['sumTotal'];
     return (sum as num?)?.toDouble() ?? 0.0;

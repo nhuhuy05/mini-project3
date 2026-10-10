@@ -66,46 +66,49 @@ class AppDatabase {
   /// Chèn 4 hóa đơn mẫu ban đầu theo đúng yêu cầu Mục 23 (Test Data)
   /// Giúp người dùng và giảng viên có thể test ngay các chức năng thống kê và lịch sử
   Future<void> seedInitialData(Database db) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
     final sampleReceipts = [
       ReceiptModel(
         merchant: 'WINMART',
         total: 150000,
-        date: DateTime(2026, 10, 1),
+        date: today,
         category: 'Thực phẩm',
         imagePath: '',
-        rawText: 'WINMART\n01/10/2026\nSua tuoi TH True Milk 45.000\nBanh mi 20.000\nNuoc 15.000\nTOTAL 150.000 VND',
+        rawText: 'WINMART\nSua tuoi TH True Milk 45.000\nBanh mi 20.000\nNuoc 15.000\nTOTAL 150.000 VND',
         note: 'Mua đồ ăn sáng và nước uống',
-        createdAt: DateTime(2026, 10, 1, 8, 30),
+        createdAt: today.add(const Duration(hours: 8, minutes: 30)),
       ),
       ReceiptModel(
         merchant: 'CIRCLE K',
         total: 85000,
-        date: DateTime(2026, 9, 30),
+        date: today.subtract(const Duration(days: 1)),
         category: 'Thực phẩm',
         imagePath: '',
-        rawText: 'CIRCLE K\n30/09/2026\nSnack & Cafe\nTOTAL: 85.000 đ',
+        rawText: 'CIRCLE K\nSnack & Cafe\nTOTAL: 85.000 đ',
         note: 'Cà phê sáng',
-        createdAt: DateTime(2026, 9, 30, 9, 15),
+        createdAt: today.subtract(const Duration(days: 1)).add(const Duration(hours: 9, minutes: 15)),
       ),
       ReceiptModel(
         merchant: 'FPT SHOP',
         total: 1200000,
-        date: DateTime(2026, 9, 28),
+        date: today.subtract(const Duration(days: 3)),
         category: 'Thiết bị',
         imagePath: '',
-        rawText: 'FPT SHOP\n28/09/2026\nChuot khong day & Ban phim co\nTOTAL: 1.200.000 VND',
+        rawText: 'FPT SHOP\nChuot khong day & Ban phim co\nTOTAL: 1.200.000 VND',
         note: 'Phụ kiện phục vụ làm đồ án',
-        createdAt: DateTime(2026, 9, 28, 14, 0),
+        createdAt: today.subtract(const Duration(days: 3)).add(const Duration(hours: 14)),
       ),
       ReceiptModel(
         merchant: 'BOOKSTORE',
         total: 250000,
-        date: DateTime(2026, 9, 27),
+        date: today.subtract(const Duration(days: 5)),
         category: 'Nghiên cứu',
         imagePath: '',
-        rawText: 'BOOKSTORE\n27/09/2026\nGiao trinh Flutter & AI on-device\nTOTAL: 250.000 VND',
+        rawText: 'BOOKSTORE\nGiao trinh Flutter & AI on-device\nTOTAL: 250.000 VND',
         note: 'Sách chuyên khảo sinh viên',
-        createdAt: DateTime(2026, 9, 27, 16, 45),
+        createdAt: today.subtract(const Duration(days: 5)).add(const Duration(hours: 16, minutes: 45)),
       ),
     ];
 
