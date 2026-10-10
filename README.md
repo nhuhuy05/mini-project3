@@ -1,15 +1,6 @@
 # SpendWise - Quản lý chi tiêu & Quét hóa đơn
 
-Đồ án Mini-Project 3 môn Phát triển ứng dụng di động đa nền tảng (Cross-Platform Mobile App Development - VKU). Ứng dụng hỗ trợ theo dõi chi tiêu cá nhân, tự động nhận diện thông tin hóa đơn bằng OCR trên thiết bị và trực quan hóa dữ liệu bằng biểu đồ.
-
-## Thông tin sinh viên
-- **Họ và tên:** Nguyễn Như Huy
-- **Mã sinh viên:** 23IT.B077
-- **Lớp:** 23IT
-- **Giảng viên hướng dẫn:** Bộ môn Công nghệ thông tin - VKU
-- **Repository:** https://github.com/nhuhuy05/mini-project3
-
----
+Ứng dụng theo dõi chi tiêu cá nhân bằng Flutter, hỗ trợ quét hóa đơn tự động qua OCR trên thiết bị và trực quan hóa dữ liệu bằng biểu đồ.
 
 ## Các tính năng chính
 
