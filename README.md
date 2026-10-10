@@ -1,207 +1,153 @@
-# 📱 SpendWise – Smart Receipt & Expense Tracker
-> **Ứng dụng di động theo dõi chi tiêu & quản lý hóa đơn thông minh**  
-> Xây dựng bằng **Flutter & Dart**, ứng dụng **On-Device OCR (Google ML Kit)** và trực quan hóa dữ liệu thuần **CustomPainter**.
+# 📱 SpendWise — Smart Receipt & Expense Tracker
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.47.5-blue.svg)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.13.4-blue.svg)](https://dart.dev)
-[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Layered-emerald.svg)]()
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-orange.svg)]()
-[![Offline-First](https://img.shields.io/badge/Database-SQLite%20(Offline--First)-green.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)]()
+> **Ứng dụng theo dõi chi tiêu và bóc tách hóa đơn thông minh ngoại tuyến (Offline-First)**  
+> Được xây dựng bằng **Flutter & Dart**, tích hợp **On-Device OCR (Google ML Kit)** và trực quan hóa dữ liệu tài chính thuần túy bằng **CustomPainter**.
 
----
-
-## 🌟 1. Giới thiệu tổng quan (Project Overview)
-
-**SpendWise** là đồ án ứng dụng di động hoàn chỉnh giải quyết bài toán quản lý tài chính cá nhân một cách tự động, bảo mật và tiện lợi. 
-
-Thay vì phải nhập thủ công từng khoản chi, người dùng chỉ cần chụp ảnh hoặc chọn ảnh hóa đơn bán lẻ, hệ thống trí tuệ nhân tạo chạy trực tiếp trên thiết bị (**On-Device AI**) sẽ nhận diện ký tự quang học (**OCR**), trích xuất thông tin trọng yếu (Tên cửa hàng, Ngày giao dịch, Tổng tiền) và trực quan hóa báo cáo tài chính bằng các biểu đồ tương tác sinh động.
-
-### 🛡️ Nguyên tắc cốt lõi (Core Principles)
-1. **Offline-First & Data Privacy**: 100% dữ liệu hóa đơn, hình ảnh và cơ sở dữ liệu được lưu cục bộ trên máy người dùng qua SQLite. Không gửi ảnh lên máy chủ đám mây, bảo mật quyền riêng tư tài chính tuyệt đối.
-2. **On-Device Machine Learning**: Sử dụng **Google ML Kit Text Recognition** chạy trực tiếp bằng phần cứng điện thoại, không cần kết nối mạng Internet.
-3. **Pure CustomPainter Visuals**: Toàn bộ biểu đồ hình vành khăn (**Donut Chart**) và biểu đồ cột tuần (**Weekly Bar Chart**) được lập trình vẽ thuần bằng `CustomPainter` và `Canvas` API, **tuyệt đối không phụ thuộc thư viện biểu đồ bên thứ 3**.
-4. **Clean Layered Architecture**: Tách biệt rõ ràng các tầng giao diện (UI), điều khiển trạng thái (Controller), tầng truy xuất dữ liệu (Repository), và dịch vụ phần cứng (Services).
+[![Flutter](https://img.shields.io/badge/Flutter-3.47.5-02569B?logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.13.4-0175C2?logo=dart)](https://dart.dev)
+[![Database](https://img.shields.io/badge/Database-SQLite%20(sqflite)-003B57?logo=sqlite)](https://sqlite.org)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-3DDC84?logo=android)](https://flutter.dev)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
-## 🚀 2. Các tính năng chính (Key Features)
+## 💡 Giới thiệu (Overview)
 
-### 📸 A. Chụp ảnh & Căn chỉnh hóa đơn (Camera & Crop)
-- **Camera Scan chuyên dụng**: Khung ngắm định vị hóa đơn (`CameraOverlayPainter`), chạm để lấy nét (`Tap-to-focus`), hỗ trợ bật/tắt đèn Flash (`off`, `torch`, `auto`).
-- **Cắt xén ảnh thông minh**: Tích hợp `image_cropper` giúp người dùng loại bỏ phần thừa, tăng độ chính xác khi quét OCR.
-- **Lưu trữ ảnh nội bộ**: Lưu trữ an toàn trong thư mục tài liệu cục bộ của ứng dụng (`path_provider`).
+**SpendWise** giải quyết bài toán quản lý tài chính cá nhân thủ công bằng cách tự động hóa quy trình nhập liệu thông qua trí tuệ nhân tạo chạy trực tiếp trên thiết bị (**On-Device AI**).
 
-### 🔍 B. Nhận diện chữ & Bóc tách thông minh (OCR & Regex Heuristic Engine)
-- **Google ML Kit Text Recognition**: Nhận dạng ký tự quang học tốc độ cao, hoạt động ngoại tuyến.
-- **Heuristic Regex Parser**:
-  - **Tên cửa hàng (Merchant)**: Nhận diện các chuỗi siêu thị/bán lẻ lớn (WinMart, Circle K, FPT Shop, GS25, Highland, Phúc Long, v.v.), loại bỏ dòng tiêu đề rác (blacklist: HÓA ĐƠN, VAT, TAX).
-  - **Tổng tiền (Total Amount)**: Hỗ trợ linh hoạt các định dạng tiền tệ Việt Nam (`150.000 đ`, `150,000 VND`, `1.500.000`).
-  - **Ngày giao dịch (Date)**: Trích xuất chuẩn xác các định dạng ngày tháng (`DD/MM/YYYY`, `DD-MM-YYYY`, `DD.MM.YYYY`).
+Người dùng chỉ cần chụp ảnh hóa đơn bán lẻ, hệ thống sẽ tự động quét, nhận diện ký tự quang học (**OCR**) và bóc tách các trường thông tin trọng yếu (*Tên cửa hàng, Ngày giao dịch, Tổng tiền thanh toán*), sau đó trực quan hóa báo cáo tài chính qua các biểu đồ tương tác sinh động.
 
-### ✍️ C. Kiểm tra & Chỉnh sửa trước khi lưu (Review Screen)
-- **Nguyên tắc an toàn dữ liệu**: Hóa đơn sau OCR không bao giờ lưu tự động vào database mà luôn hiển thị màn hình Review để người dùng kiểm tra, chỉnh sửa tên cửa hàng, ngày, số tiền, ghi chú và chọn danh mục chi tiêu chuẩn.
-- **Xem đối chiếu**: Hiển thị ảnh chụp hóa đơn thu nhỏ kèm bảng xem nội dung thô (**Raw OCR Text**).
-
-### 💾 D. Quản lý cơ sở dữ liệu cục bộ (SQLite Local Database)
-- Hệ quản trị SQLite nội bộ (`sqflite`), hỗ trợ đầy đủ các thao tác **CRUD**:
-  - Thêm mới hóa đơn (`insertReceipt`).
-  - Đọc danh sách sắp xếp theo thời gian (`getAllReceipts`).
-  - Cập nhật thông tin (`updateReceipt`).
-  - Xóa hóa đơn và đồng thời xóa file ảnh tương ứng (`deleteReceipt`).
-- Tích hợp 4 bản ghi dữ liệu mẫu ban đầu (WinMart, Circle K, FPT Shop, Bookstore) phục vụ kiểm thử ngay khi cài đặt.
-
-### 📜 E. Lịch sử chi tiêu & Bộ lọc đa năng (History & Search)
-- **Tìm kiếm thời gian thực**: Tìm theo tên cửa hàng hoặc nội dung ghi chú.
-- **Lọc theo danh mục (Category Chips)**: Thanh cuộn ngang hiển thị các nhóm chi tiêu chuẩn (Thực phẩm, Nghiên cứu, Du lịch, Thiết bị, Giải trí, Khác) kèm số lượng và màu sắc đại diện.
-- **Sắp xếp linh hoạt**: Mới nhất, Cũ nhất, Số tiền cao nhất, Số tiền thấp nhất.
-- **Vuốt để xóa (Dismissible)**: Thao tác vuốt sang trái tiện lợi kèm hộp thoại xác nhận an toàn.
-
-### 📊 F. Báo cáo & Trực quan hóa dữ liệu thuần `CustomPainter`
-- **Biểu đồ hình vành khăn (CategoryDonutChart)**:
-  - Phân bổ chi tiêu theo danh mục với hiệu ứng quét góc mượt mà (`AnimationController`).
-  - Tâm biểu đồ thông minh: chạm vào danh mục để xem chi tiết số tiền và tỉ trọng `%`.
-  - Hàng chú thích (Legend) tương tác.
-- **Biểu đồ cột chi tiêu 7 ngày (WeeklyExpenseChart)**:
-  - Thể hiện chi tiêu theo từng ngày trong tuần.
-  - Cột hoạt họa mọc từ đáy lên, phân biệt ngày hôm nay, chạm vào cột để xem số tiền.
-- **Bảng xếp hạng chi tiêu**: Xếp hạng các nhóm hàng từ cao xuống thấp kèm thanh tiến trình tỉ trọng.
-- **Bộ lọc chu kỳ**: Xem theo *Tuần này*, *Tháng này*, hoặc *Toàn bộ*.
-
-### 🌓 G. Giao diện chuẩn Material 3 & Chế độ Sáng/Tối (Light & Dark Mode)
-- **Hệ thống Design Token**: Bảng màu Emerald/Teal hài hòa, hỗ trợ chế độ Slate Dark Mode (`#0F172A`, `#1E293B`).
-- **Nút chuyển Theme (ThemeToggleButton)**: Nút chuyển động nhanh (Animated Sun/Moon) xuất hiện trên thanh AppBar của tất cả các màn hình chính và chi tiết.
-- **Thích ứng toàn diện (Adaptive Styling)**: Toàn bộ thẻ thống kê, biểu đồ `CustomPainter`, lịch sử chi tiêu, ô nhập liệu và bottom sheets đều tự động biến đổi mượt mà theo `ThemeMode`.
+### 🛡️ Nguyên tắc thiết kế cốt lõi
+* **100% Offline-First & Bảo mật riêng tư:** Toàn bộ dữ liệu giao dịch và ảnh chụp được lưu trữ cục bộ qua SQLite. Tuyệt đối không gửi dữ liệu tài chính lên máy chủ đám mây.
+* **On-Device Machine Learning:** Sử dụng Google ML Kit Text Recognition chạy trực tiếp bằng phần cứng thiết bị, hoạt động mọi lúc không cần kết nối Internet.
+* **Pure CustomPainter Visuals:** Biểu đồ vành khăn (Donut Chart) và biểu đồ cột (Weekly Bar Chart) được lập trình vẽ thuần bằng Canvas API, **hoàn toàn không dùng thư viện biểu đồ bên thứ 3** (`fl_chart`, `syncfusion`).
+* **Kiến trúc phân tầng sạch (Clean Architecture):** Tách bạch rõ ràng giữa UI, State Controller, Repository và Services.
 
 ---
 
-## 🏗️ 3. Cấu trúc thư mục dự án (Architecture & Folder Structure)
+## ⚡ Luồng xử lý OCR Heuristic (Workflow)
 
 ```text
-lib/
-├── app.dart                                # Root MaterialApp & MainNavigationShell (3 Tab Navigation)
-├── main.dart                               # Entry point, khởi tạo WidgetsFlutterBinding & SQLite
-├── core/
-│   ├── constants/
-│   │   ├── app_colors.dart                 # Bảng màu chuẩn Emerald/Teal & Dark Mode ThemeContextExtension
-│   │   └── app_constants.dart              # Hằng số danh mục chi tiêu, icon, màu sắc
-│   ├── services/
-│   │   ├── ocr_service.dart                # Giao tiếp Google ML Kit Text Recognition
-│   │   ├── receipt_controller.dart         # State management kế thừa ChangeNotifier
-│   │   ├── receipt_image_storage_service.dart # Quản lý lưu trữ/xóa file ảnh cục bộ
-│   │   └── receipt_parser_service.dart     # Heuristic Regex Engine bóc tách thông tin
-│   ├── theme/
-│   │   ├── app_theme.dart                  # Cấu hình giao diện Material 3 (Light & Dark)
-│   │   └── theme_controller.dart          # Điều khiển ThemeMode toàn ứng dụng
-│   ├── widgets/
-│   │   └── theme_toggle_button.dart        # Nút chuyển đổi giao diện Sáng/Tối động
-│   └── utils/
-│       └── currency_formatter.dart         # Định dạng tiền tệ VND & ngày tháng
-├── data/
-│   ├── database/
-│   │   └── app_database.dart               # Cấu hình SQLite, tạo bảng receipts & seed data
-│   ├── models/
-│   │   ├── receipt_data.dart               # DTO chứa kết quả trích xuất sau Regex Parser
-│   │   └── receipt_model.dart              # Model thực thể hóa đơn lưu trong SQLite
-│   └── repositories/
-│       └── receipt_repository.dart         # Repository xử lý truy vấn SQL CRUD
-└── features/
-    ├── home/
-    │   ├── screens/
-    │   │   └── home_screen.dart            # Dashboard tổng quan, thống kê nhanh, hóa đơn gần đây
-    │   └── widgets/
-    │       ├── quick_stat_card.dart        # Thẻ thống kê chi tiêu tháng/tuần
-    │       ├── recent_receipt_item.dart    # Thẻ hiển thị hóa đơn gần đây
-    │       └── scan_action_banner.dart     # Banner kêu gọi quét hóa đơn
-    ├── scan/
-    │   ├── screens/
-    │   │   ├── camera_scan_screen.dart     # Màn hình camera chụp ảnh hóa đơn
-    │   │   ├── image_preview_screen.dart   # Xem lại & cắt xén ảnh
-    │   │   └── ocr_processing_screen.dart  # Chạy OCR & hiển thị kết quả phân tích
-    │   └── widgets/
-    │       └── camera_overlay_painter.dart # Khung ngắm vẽ bằng CustomPainter
-    ├── receipt/
-    │   └── screens/
-    │       ├── receipt_review_screen.dart  # Kiểm tra, chỉnh sửa & lưu hóa đơn
-    │       └── receipt_detail_screen.dart  # Chi tiết hóa đơn, zoom ảnh, raw text, sửa & xóa
-    ├── expenses/
-    │   └── screens/
-    │       └── expense_history_screen.dart # Lịch sử chi tiêu, tìm kiếm, lọc chip, sắp xếp
-    └── statistics/
-        ├── screens/
-        │   └── statistics_screen.dart      # Màn hình thống kê chi tiêu tổng hợp
-        └── widgets/
-            ├── category_donut_chart.dart   # Biểu đồ Donut vẽ bằng CustomPainter
-            ├── weekly_expense_chart.dart   # Biểu đồ cột 7 ngày vẽ bằng CustomPainter
-            └── category_breakdown_item.dart# Bảng xếp hạng chi tiêu danh mục
+[Chụp ảnh / Chọn ảnh] 
+       │
+       ▼
+[Căn chỉnh & Cắt xén (Crop)] 
+       │
+       ▼
+[Google ML Kit (On-Device OCR)] ──► Văn bản thô (Raw OCR text)
+       │
+       ▼
+[Regex Heuristic Parser] 
+   ├── 🏢 Merchant: So khớp thương hiệu (WinMart, Circle K,...) & lọc Blacklist
+   ├── 📅 Date: Trích xuất chuẩn DD/MM/YYYY, DD-MM-YYYY, DD.MM.YYYY
+   └── 💰 Total: Thuật toán nhận diện số tiền lớn nhất (Hỗ trợ định dạng VND, đ, dấu chấm/phẩy)
+       │
+       ▼
+[Màn hình Review & Chỉnh sửa] ──► Người dùng xác nhận dữ liệu trước khi lưu
+       │
+       ▼
+[Lưu SQLite & Cập nhật UI] ──► Dashboard, Lịch sử chi tiêu & Biểu đồ CustomPainter
 ```
 
 ---
 
-## 🛠️ 4. Hướng dẫn cài đặt & Chạy ứng dụng (Getting Started)
+## 🚀 Tính năng nổi bật (Core Features)
 
-### Yêu cầu môi trường
-- **Flutter SDK**: `>= 3.20.0`
-- **Dart SDK**: `>= 3.4.0`
-- **Android Studio / VS Code / Antigravity IDE**
-- **Android Device / Emulator**: Android 5.0 (API Level 21) trở lên.
+| Phân hệ | Mô tả chi tiết |
+|---|---|
+| **📸 Quét & Xử lý ảnh** | Viewfinder trực tiếp, chạm lấy nét (*tap-to-focus*), bật/tắt Flash, tích hợp cắt xén góc thông minh (`image_cropper`). |
+| **🔍 On-Device OCR** | Nhận dạng ký tự ngoại tuyến siêu tốc với Google ML Kit, tự động trích xuất Tên cửa hàng, Ngày tháng và Tổng tiền. |
+| **✍️ Review & An toàn dữ liệu** | Hóa đơn luôn qua bước đối chiếu ảnh gốc / văn bản thô để người dùng chỉnh sửa, phân loại danh mục trước khi ghi vào database. |
+| **💾 Quản lý dữ liệu (SQLite)** | Lưu trữ bền vững, đầy đủ thao tác CRUD (Thêm, Đọc, Cập nhật, Xóa kèm ảnh gốc). Khởi tạo sẵn 4 bản ghi mẫu demo. |
+| **📜 Lịch sử & Bộ lọc** | Tìm kiếm theo từ khóa thời gian thực, lọc theo nhóm danh mục (*Category Chips*), sắp xếp đa chiều, vuốt để xóa (*Dismissible*). |
+| **📊 Biểu đồ CustomPainter** | Biểu đồ hình vành khăn (**CategoryDonutChart**) kèm animation & tâm tương tác; Biểu đồ cột 7 ngày (**WeeklyExpenseChart**) chuyển động mọc từ đáy lên. |
+| **🎨 Material 3 & Dark Mode** | Bảng màu **Tím Hoàng Gia & Hồng Neon (Royal Violet & Vivid Fuchsia)** hiện đại. Nút chuyển đổi Light/Dark mode mượt mà trên toàn bộ màn hình. |
 
-### Các bước cài đặt
+---
 
-1. **Clone repository**:
+## 🛠️ Công nghệ & Thư viện sử dụng (Tech Stack)
+
+* **Framework & Ngôn ngữ:** Flutter 3.x • Dart 3.x
+* **Xử lý hình ảnh & Camera:** `camera`, `image_picker`, `image_cropper`, `path_provider`
+* **Trí tuệ nhân tạo:** `google_mlkit_text_recognition` (On-Device)
+* **Cơ sở dữ liệu cục bộ:** `sqflite`, `path`
+* **Vẽ đồ họa & Biểu đồ:** Pure `CustomPainter` & `Canvas` API, `AnimationController`
+* **Quản lý trạng thái:** `ChangeNotifier` / `ListenableBuilder`
+* **Kiểm thử tự động:** `flutter_test`, `sqflite_common_ffi`
+
+---
+
+## 📁 Cấu trúc thư mục (Project Structure)
+
+```text
+lib/
+├── app.dart                                # MaterialApp, Dark/Light Theme & NavigationShell
+├── main.dart                               # Entry point, cấu hình StatusBar
+├── core/
+│   ├── constants/                          # Bảng màu (Royal Violet), danh mục & icon
+│   ├── services/                           # OCR Service, Regex Heuristic Parser, Image Storage
+│   ├── theme/                              # Material 3 Theme (Light/Dark) & ThemeController
+│   ├── utils/                              # Định dạng tiền tệ VND, ngày tháng
+│   └── widgets/                            # Animated ThemeToggleButton
+├── data/
+│   ├── database/                           # SQLite AppDatabase, table schema & seed data
+│   ├── models/                             # ReceiptModel (DB Entity), ReceiptData (OCR DTO)
+│   └── repositories/                       # ReceiptRepository xử lý CRUD & thống kê SQL
+└── features/
+    ├── home/                               # Dashboard tổng quan, thẻ thống kê nhanh, Recent items
+    ├── scan/                               # Camera scan screen, Image preview, OCR processing
+    ├── receipt/                            # Màn hình Review trước khi lưu & Chi tiết hóa đơn
+    ├── expenses/                           # Lịch sử chi tiêu, tìm kiếm, lọc danh mục, sắp xếp
+    └── statistics/                         # Biểu đồ Donut & Bar chart vẽ thuần CustomPainter
+```
+
+---
+
+## 🚀 Hướng dẫn cài đặt & Chạy ứng dụng (Getting Started)
+
+### Yêu cầu tiên quyết
+* Flutter SDK `>= 3.20.0`
+* Android Studio / VS Code / Antigravity IDE
+* Thiết bị Android thật (bật USB Debugging) hoặc máy ảo Android (API Level 21+)
+
+### Khởi chạy dự án
+
+1. **Clone repository:**
    ```bash
    git clone https://github.com/nhuhuy05/mini-project3.git
    cd mini-project3
    ```
 
-2. **Cài đặt các thư viện phụ thuộc**:
+2. **Cài đặt thư viện phụ thuộc:**
    ```bash
    flutter pub get
    ```
 
-3. **Chạy kiểm thử tự động (Unit & Widget Tests)**:
+3. **Chạy ứng dụng:**
    ```bash
-   flutter test
+   flutter run
    ```
-
-4. **Kiểm tra phân tích mã nguồn (Flutter Analyze)**:
-   ```bash
-   flutter analyze
-   ```
-
-5. **Chạy ứng dụng trên thiết bị Android (hoặc iOS)**:
-   - Cắm điện thoại qua cáp USB và bật **Gỡ lỗi USB (USB Debugging)**.
-   - Chạy lệnh:
-     ```bash
-     flutter run
-     ```
 
 ---
 
-## 🧪 5. Kết quả kiểm thử tự động (Automated Tests)
+## 🧪 Kiểm thử tự động (Automated Testing)
 
-Dự án bao gồm bộ Unit Test hoàn chỉnh bao phủ toàn bộ các tầng nghiệp vụ:
-- `test/receipt_parser_test.dart`:
-  - ✅ Phân tích hóa đơn WinMart theo ví dụ mẫu.
-  - ✅ Hỗ trợ tất cả các định dạng tiền tệ (`.`, `,`, `đ`, `VND`).
-  - ✅ Nhận diện chính xác định dạng ngày tháng `DD/MM/YYYY`, `DD-MM-YYYY`, `DD.MM.YYYY`.
-  - ✅ Cơ chế lọc Blacklist và nhận diện chuỗi siêu thị của `MerchantParser`.
-- `test/receipt_repository_test.dart`:
-  - ✅ Chèn hóa đơn mới (`Insert`) và đọc lại theo ID (`GetById`).
-  - ✅ Đọc toàn bộ danh sách hóa đơn (`GetAll`).
-  - ✅ Cập nhật thông tin (`Update`).
-  - ✅ Xóa hóa đơn (`Delete`).
-  - ✅ Thống kê tổng tiền theo từng danh mục (`GetTotalsByCategory`).
-- `test/widget_test.dart`:
-  - ✅ Smoke test khởi chạy giao diện `SpendWiseApp`.
+Dự án được xây dựng với bộ kiểm thử tự động toàn diện, bao phủ từ thuật toán bóc tách Regex, tầng lưu trữ cơ sở dữ liệu cho đến khởi chạy giao diện:
+
+```bash
+flutter test
+```
+
+* **OCR Regex Heuristic Test (`receipt_parser_test.dart`):** Kiểm thử độ chính xác khi bóc tách hóa đơn mẫu, nhận diện đa dạng định dạng tiền tệ (`.`, `,`, `đ`, `VND`), định dạng ngày tháng và lọc blacklist.
+* **SQLite CRUD Integration Test (`receipt_repository_test.dart`):** Kiểm thử toàn bộ thao tác Thêm, Sửa, Xóa, Đọc và Thống kê nhóm danh mục trên bộ nhớ ảo FFI.
+* **Widget Smoke Test (`widget_test.dart`):** Kiểm thử khởi chạy và render thành công giao diện ứng dụng.
 
 ---
 
-## 👨‍💻 Tác giả & Đồ án
-- **Sinh viên thực hiện**: Nguyễn Như Huy
-- **Mã số sinh viên (MSSV)**: 23IT.B077
-- **Lớp**: 23IT
-- **Học phần**: Phát triển ứng dụng di động đa nền tảng (Cross-Platform Mobile App Development) - VKU
-- **Ứng dụng**: SpendWise – Smart Receipt & Expense Tracker
-- **Ngôn ngữ & Nền tảng**: Dart & Flutter
-- **Repository**: [https://github.com/nhuhuy05/mini-project3](https://github.com/nhuhuy05/mini-project3)
+## 👨‍💻 Thông tin tác giả & Đồ án
+
+* **Sinh viên thực hiện:** Nguyễn Như Huy
+* **Mã số sinh viên (MSSV):** `23IT.B077` — Lớp: `23IT`
+* **Học phần:** Phát triển ứng dụng di động đa nền tảng (*Cross-Platform Mobile App Development*)
+* **Trường:** Trường Đại học Công nghệ Thông tin và Truyền thông Việt - Hàn (VKU), Đại học Đà Nẵng
+* **GitHub Repository:** [https://github.com/nhuhuy05/mini-project3](https://github.com/nhuhuy05/mini-project3)
